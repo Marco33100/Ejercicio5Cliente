@@ -53,6 +53,17 @@ pipeline {
                 sh 'mvn --batch-mode --no-transfer-progress clean verify'
             }
         }
+
+        stage('Publicar cobertura') {
+            steps {
+                recordCoverage(
+                    tools: [[parser: 'JACOCO', pattern: 'target/site/jacoco/jacoco.xml']],
+                    sourceDirectories: [[path: 'src/main/java']],
+                    sourceCodeRetention: 'LAST_BUILD',
+                    failOnError: true
+                )
+            }
+        }
     }
 
     post {
