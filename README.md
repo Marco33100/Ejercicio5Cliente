@@ -58,4 +58,4 @@ Para utilizarlo, crea un trabajo de tipo **Pipeline** llamado `CompilarClienteJa
 
 Guarda y selecciona **Construir ahora**. En la consola deben aparecer Java 21, Maven 3.9.11, `BUILD SUCCESS` y `Finished: SUCCESS`.
 
-Las pruebas y verificaciones descritas arriba se realizaron localmente. La ejecución del trabajo del cliente en Jenkins debe comprobarse con su propia consola. Los análisis de cobertura y SonarQube se configuran por separado.
+Además de la verificación local, el trabajo `CompilarClienteJava21` terminó en `SUCCESS` con JDK 21.0.12.1 y Maven 3.9.11: compilación para Java 21, una prueba aprobada y JAR generado. JUnit publicó los resultados en Jenkins. Los análisis de cobertura del cliente y SonarQube se configuran por separado.
