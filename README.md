@@ -39,4 +39,23 @@ El historial conserva la importación del proyecto y de sus recursos, seguida de
 
 ## Jenkins
 
-Las herramientas configuradas son `JDK21` y `Maven3` (Maven 3.9.11). Su ejecución de verificación confirmó Java 21. La conexión de este repositorio con un trabajo de Jenkins y la configuración de análisis se realizan en la siguiente etapa; las pruebas indicadas arriba se ejecutaron localmente.
+El repositorio incluye un [Jenkinsfile](Jenkinsfile) que descarga el proyecto, muestra las versiones de Java y Maven, ejecuta `mvn clean verify` y publica los resultados de las pruebas existentes.
+
+Requiere estas herramientas en **Administrar Jenkins > Tools**:
+
+- JDK con nombre `JDK21`, ruta `/opt/java/openjdk` en el contenedor Jenkins.
+- Maven con nombre `Maven3`, versión 3.9.11.
+- Complemento JUnit para publicar los resultados.
+
+Para utilizarlo, crea un trabajo de tipo **Pipeline** llamado `CompilarClienteJava21` y configura:
+
+- Definition: **Pipeline script from SCM**.
+- SCM: **Git**.
+- Repository URL: `https://github.com/Marco33100/Ejercicio5Cliente.git`.
+- Credentials: ninguna, porque el repositorio es público.
+- Branch Specifier: `*/main`.
+- Script Path: `Jenkinsfile`.
+
+Guarda y selecciona **Construir ahora**. En la consola deben aparecer Java 21, Maven 3.9.11, `BUILD SUCCESS` y `Finished: SUCCESS`.
+
+Las pruebas y verificaciones descritas arriba se realizaron localmente. La ejecución del trabajo del cliente en Jenkins debe comprobarse con su propia consola. Los análisis de cobertura y SonarQube se configuran por separado.
