@@ -40,6 +40,14 @@ pipeline {
             }
         }
 
+        stage('Ver Directorio') {
+            steps {
+                sh 'pwd'
+                sh 'ls -la'
+                sh 'cat pom.xml'
+            }
+        }
+
         stage('Verificar Java y Maven') {
             steps {
                 sh 'java -version'
@@ -48,9 +56,9 @@ pipeline {
             }
         }
 
-        stage('Compilar y probar') {
+        stage('Build & Test') {
             steps {
-                sh 'mvn --batch-mode --no-transfer-progress clean verify'
+                sh 'mvn --batch-mode --no-transfer-progress clean verify -Dsurefire.useFile=false'
             }
         }
 

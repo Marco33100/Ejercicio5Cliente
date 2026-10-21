@@ -53,14 +53,11 @@ Requiere estas herramientas en **Administrar Jenkins > Tools**:
 - Maven con nombre `Maven3`, versión 3.9.11.
 - Complemento JUnit para publicar los resultados.
 
-Para utilizarlo, crea un trabajo de tipo **Pipeline** llamado `CompilarClienteJava21` y configura:
+Para utilizarlo como solicita la práctica, crea un trabajo de tipo **Pipeline** llamado `CompilarClienteJava21`, selecciona Definition **Pipeline script** y pega todo el contenido del [Jenkinsfile](Jenkinsfile) en el campo Script. Mantén activada la opción **Use Groovy Sandbox**. El código contiene la URL del repositorio público y la rama `main` para descargar el proyecto.
 
-- Definition: **Pipeline script from SCM**.
-- SCM: **Git**.
-- Repository URL: `https://github.com/Marco33100/Ejercicio5Cliente.git`.
-- Credentials: ninguna, porque el repositorio es público.
-- Branch Specifier: `*/main`.
-- Script Path: `Jenkinsfile`.
+La etapa **Ver Directorio** ejecuta `pwd`, `ls -la` y `cat pom.xml`, para mostrar la ubicación, los archivos y el POM en la consola. **Build & Test** ejecuta `mvn --batch-mode --no-transfer-progress clean verify -Dsurefire.useFile=false`. La opción de Surefire muestra los resultados de pruebas en consola. Se conserva `verify` para generar también el reporte de JaCoCo.
+
+El POM está en la raíz del repositorio, por lo que estos comandos se ejecutan directamente en el directorio de trabajo.
 
 Guarda y selecciona **Construir ahora**. En la consola deben aparecer Java 21, Maven 3.9.11, `BUILD SUCCESS` y `Finished: SUCCESS`.
 
