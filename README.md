@@ -59,6 +59,8 @@ La etapa **Ver Directorio** ejecuta `pwd`, `ls -la` y `cat pom.xml`, para mostra
 
 El POM está en la raíz del repositorio, por lo que estos comandos se ejecutan directamente en el directorio de trabajo.
 
+El bloque **Build & Test** tiene la estructura `steps { dir('.') { sh ... } }`. El punto selecciona ese directorio de trabajo, donde se encuentra el POM.
+
 Guarda y selecciona **Construir ahora**. En la consola deben aparecer Java 21, Maven 3.9.11, `BUILD SUCCESS` y `Finished: SUCCESS`.
 
 Además de la verificación local, el trabajo `CompilarClienteJava21` terminó en `SUCCESS` con JDK 21.0.12.1 y Maven 3.9.11: compilación para Java 21, una prueba aprobada y JAR generado. JUnit publicó los resultados en Jenkins. Esa ejecución es anterior a la incorporación de los nuevos plugins Maven; vuelve a construir el trabajo para publicar la cobertura del cliente con el Jenkinsfile actualizado. La integración con el servidor SonarQube sigue pendiente.

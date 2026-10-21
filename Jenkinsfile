@@ -58,7 +58,11 @@ pipeline {
 
         stage('Build & Test') {
             steps {
-                sh 'mvn --batch-mode --no-transfer-progress clean verify -Dsurefire.useFile=false'
+                dir('.') {
+                    sh '''
+                        mvn --batch-mode --no-transfer-progress clean verify -Dsurefire.useFile=false
+                    '''
+                }
             }
         }
 
