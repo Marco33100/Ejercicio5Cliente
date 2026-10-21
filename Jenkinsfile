@@ -13,7 +13,30 @@ pipeline {
     stages {
         stage('Descargar proyecto') {
             steps {
-                checkout scm
+                withEnv([
+                    'GIT_CONFIG_COUNT=1',
+                    'GIT_CONFIG_KEY_0=http.version',
+                    'GIT_CONFIG_VALUE_0=HTTP/1.1'
+                ]) {
+                    retry(2) {
+                        checkout scmGit(
+                            branches: [[name: '*/main']],
+                            extensions: [
+                                cloneOption(
+                                    shallow: true,
+                                    depth: 1,
+                                    noTags: true,
+                                    honorRefspec: true,
+                                    timeout: 30
+                                )
+                            ],
+                            userRemoteConfigs: [[
+                                url: 'https://github.com/Marco33100/Ejercicio5Cliente.git',
+                                refspec: '+refs/heads/main:refs/remotes/origin/main'
+                            ]]
+                        )
+                    }
+                }
             }
         }
 
