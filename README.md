@@ -43,6 +43,12 @@ El POM declara Sonar Maven Plugin **5.5.0.6356**, JaCoCo **0.8.15** y Surefire *
 
 El análisis SonarQube requiere configurar el servidor y su token y ejecutar `mvn sonar:sonar`. Declarar el plugin en el POM no ejecuta ese análisis automáticamente. Consulta el [detalle de los cambios](docs/actualizacion-java21.md).
 
+## Cobertura actual: 100 % del codigo Java
+
+La suite actual tiene **34 pruebas aprobadas**, sin fallos, errores ni omisiones, verificadas con JDK 21 y Maven 3.9.11 dentro del contenedor Jenkins. JaCoCo reporta **97/97 metodos** y **259/259 lineas**, ambos al **100 %**, sin exclusiones de clases o metodos. Consulta las [pruebas, cambios y limites de la medicion](docs/cobertura-100.md).
+
+Para actualizar el resultado del trabajo **CompilarClienteJava21**, pulsa **Construir ahora**: el pipeline existente descarga `main` y ejecuta `clean verify`. El resultado anterior de una sola prueba se conserva abajo como evidencia historica.
+
 ## Jenkins
 
 El repositorio incluye un [Jenkinsfile](Jenkinsfile) que descarga el proyecto, muestra las versiones de Java y Maven, ejecuta `mvn clean verify` y publica los resultados de las pruebas existentes.
