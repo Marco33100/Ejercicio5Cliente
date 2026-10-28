@@ -76,6 +76,26 @@ pipeline {
                 )
             }
         }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarServer') {
+                    dir('.') {
+                        sh '''
+                            set +x
+                            SONAR_TOKEN="$SONAR_AUTH_TOKEN" \
+                            mvn --batch-mode --no-transfer-progress \
+                                org.sonarsource.scanner.maven:sonar-maven-plugin:5.5.0.6356:sonar \
+                                -Dsonar.projectKey=Ejercicio5Cliente \
+                                -Dsonar.projectName=Ejercicio5Cliente \
+                                -Dsonar.host.url=http://host.docker.internal:9000 \
+                                -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
+                                -Dsonar.exclusions=target/**,**/target/**
+                        '''
+                    }
+                }
+            }
+        }
     }
 
     post {
