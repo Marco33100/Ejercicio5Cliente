@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -33,6 +34,7 @@ public class GestorController {
 
     private final RestTemplate template;
 
+    @Autowired
     public GestorController() {
         this(new RestTemplate());
     }

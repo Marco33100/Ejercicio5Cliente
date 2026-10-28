@@ -35,3 +35,18 @@ JaCoCo corresponde al código Java instrumentado, no a JavaScript o HTML.
 Validación del cambio: sintaxis Groovy y de los bloques shell comprobada.
 El envío efectivo y los resultados de SonarQube se verificarán al ejecutar
 el trabajo con su credencial.
+
+## Atención de la incidencia java:S6829
+
+El primer análisis del cliente mostró una incidencia media de fiabilidad y
+mantenibilidad: `GestorController` tiene dos constructores y ninguno indicaba
+explícitamente cuál debe utilizar Spring. Se añadió `@Autowired` al constructor
+público sin argumentos, conservando su comportamiento de crear el RestTemplate
+y el constructor auxiliar que permite probar las peticiones HTTP.
+
+Se verificaron nuevamente el arranque real de Spring y las 34 pruebas: todas
+aprobadas, sin fallos, errores u omisiones. JaCoCo conserva 97/97 métodos y
+259/259 líneas, 100 %, sin exclusiones. El cierre de la incidencia debe
+comprobarse ejecutando nuevamente `CompilarClienteJava21` y esperando el
+procesamiento de SonarQube. El Pipeline script actual ya contiene el análisis
+y no necesita cambiarse para esta corrección del controlador.
