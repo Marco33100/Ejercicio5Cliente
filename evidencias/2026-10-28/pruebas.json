@@ -1,0 +1,40 @@
+{
+  "fecha_ejecucion": "2026-10-28",
+  "trabajo": "CompilarClienteJava21",
+  "ejecucion": 7,
+  "resultado": "SUCCESS",
+  "suites": [
+    {
+      "name": "com.mx.cbtis.bromitas.Ejercicio5ClienteApplicationTests",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "5.918"
+    },
+    {
+      "name": "com.mx.cbtis.controller.GestorControllerTest",
+      "tests": "27",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "1.367"
+    },
+    {
+      "name": "com.mx.cbtis.Ejercicio5ClienteMainTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "0.335"
+    },
+    {
+      "name": "com.mx.cbtis.modelo.ContratoModelosJsonTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "0.045"
+    }
+  ]
+}

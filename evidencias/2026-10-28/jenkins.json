@@ -1,0 +1,31 @@
+[
+  {
+    "name": "CompilarClienteJava21",
+    "stages": [
+      "Descargar proyecto",
+      "Ver Directorio",
+      "Verificar Java y Maven",
+      "Build & Test",
+      "Publicar cobertura",
+      "SonarQube Analysis"
+    ],
+    "sonar": true,
+    "semgrep": false,
+    "explicitTargetExclusion": true,
+    "sqlChecks": false,
+    "lastBuild": "7",
+    "result": "SUCCESS",
+    "timestamp": "1793218580961",
+    "evidence": [
+      "[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.918 s -- in com.mx.cbtis.bromitas.Ejercicio5ClienteApplicationTests",
+      "[INFO] Tests run: 27, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.367 s -- in com.mx.cbtis.controller.GestorControllerTest",
+      "[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.335 s -- in com.mx.cbtis.Ejercicio5ClienteMainTest",
+      "[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.045 s -- in com.mx.cbtis.modelo.ContratoModelosJsonTest",
+      "[INFO] Tests run: 34, Failures: 0, Errors: 0, Skipped: 0",
+      "[Coverage] Method Coverage: 100.00% (97/97)",
+      "[Coverage] Line Coverage: 100.00% (259/259)",
+      "[INFO] ANALYSIS SUCCESSFUL, you can find the results at: http://host.docker.internal:9000/dashboard?id=Ejercicio5Cliente",
+      "Finished: SUCCESS"
+    ]
+  }
+]
