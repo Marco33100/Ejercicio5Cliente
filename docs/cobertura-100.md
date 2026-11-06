@@ -27,6 +27,6 @@ El controlador reutiliza una instancia RestTemplate. El constructor publico sin 
 
 Ejecuta `mvn --batch-mode --no-transfer-progress clean verify -Dsurefire.useFile=false`, o `./mvnw clean verify` en Linux y `mvnw.cmd clean verify` en Windows. Los reportes quedan en `target/site/jacoco/index.html` y `target/site/jacoco/jacoco.xml`.
 
-En Jenkins, vuelve a construir **CompilarClienteJava21**. Su pipeline ya descarga `main` y publica JaCoCo; este cambio no requiere reemplazar el script. La verificacion directa en el contenedor no es una nueva ejecucion de ese trabajo: su resultado se actualiza al reconstruirlo.
+El trabajo **CompilarClienteJava21 #7** terminó en SUCCESS con 34 pruebas aprobadas y publicó estos contadores. El análisis se envió a SonarQube y las capturas posteriores muestran 100 % de cobertura, cero incidencias abiertas y Quality Gate aprobado.
 
-Esta cobertura corresponde al codigo Java instrumentado por JaCoCo. No representa cobertura de JavaScript ni una prueba visual o de extremo a extremo de todas las pantallas HTML.
+Para renovar las evidencias después de cambios de código, ejecuta otra construcción y conserva sus reportes. Esta cobertura corresponde al Java instrumentado; no representa cobertura de JavaScript ni una prueba visual de todas las pantallas HTML.

@@ -1,18 +1,17 @@
 # Ejercicio5Cliente
 
-Cliente web del gestor de proyectos, desarrollado con Java 21, Spring Boot 3.2.5 y Thymeleaf. Consume la API REST de [Ejercicio5MyAPIGestor](https://github.com/Marco33100/Ejercicio5MyAPIGestor), disponible en `http://localhost:8081`.
+Cliente web del gestor de proyectos con Java 21, Spring Boot 3.2.5 y Thymeleaf. Consume la API en `http://localhost:8081`.
 
 ## Requisitos
 
 - JDK 21 y `JAVA_HOME` configurado con ese JDK.
-- La API y su base MySQL en ejecución para registrar usuarios, iniciar sesión y gestionar proyectos.
-- Conexión a Internet en el primer uso para descargar Maven y las dependencias.
+- Maven Wrapper incluido, configurado con Maven 3.9.11.
+- Conexión a Internet en el primer uso para resolver dependencias.
 
-El proyecto incluye Maven Wrapper 3.9.11; no es necesario instalar Maven globalmente.
 
 ## Compilar y ejecutar en Windows
 
-Desde la carpeta de este repositorio, en PowerShell:
+Desde la raíz del repositorio, en PowerShell:
 
 ```powershell
 java -version
@@ -21,52 +20,35 @@ java -version
 java -jar target/Ejercicio5Cliente-0.0.1-SNAPSHOT.jar --server.port=8082
 ```
 
-Abre [http://localhost:8082](http://localhost:8082). Se usa 8082 para poder ejecutar Jenkins en 8080. La API debe permanecer en 8081, que es la dirección utilizada por el cliente.
+Abre [http://localhost:8082](http://localhost:8082). La API y MySQL deben estar iniciados para usar las operaciones del gestor. Se utiliza 8082 para dejar 8080 a Jenkins.
 
-En Linux o macOS utiliza `./mvnw` en lugar de `.\mvnw.cmd`.
+En Linux o macOS utiliza `./mvnw` y configura las mismas variables de entorno si corresponde.
 
-## Actualización a Java 21
+## Pruebas y cobertura
 
-El POM pasó de Java 17 a Java 21. Spring Boot y Maven Wrapper conservaron sus versiones. La compilación con JDK 21 y Maven 3.9.11 terminó en `BUILD SUCCESS`, con una prueba existente aprobada y sin errores.
+Resultado conservado de Jenkins **CompilarClienteJava21 #7**, verificado el **28 de octubre de 2026**: **SUCCESS**. 34 pruebas aprobadas; 97/97 métodos y 259/259 líneas cubiertos al 100 %. No hay ramas evaluables en este reporte. No hubo fallos, errores ni omisiones. Estas evidencias corresponden a esa revisión y no implican que se haya ejecutado una compilación nueva al editar este README.
 
-También se comprobaron el arranque del JAR, las páginas iniciales y el registro y acceso de un usuario mediante la API y una base MySQL temporal.
+Las pruebas comprueban rutas, vistas, formularios, contratos JSON, peticiones a la API y arranque real de Spring. Las llamadas HTTP se verifican con MockRestServiceServer y RestTemplate.
 
-- [POM original para Java 17](docs/pom-original.xml)
-- [POM actualizado para Java 21](pom.xml)
-- [Explicación de la actualización](docs/actualizacion-java21.md)
+`clean verify` ejecuta Surefire y genera `target/site/jacoco/index.html` y `target/site/jacoco/jacoco.xml`. Coverage de Jenkins publica el XML. No se añadieron exclusiones manuales de clases o métodos. La cobertura mide ejecución del código Java; no acredita la calidad completa de las aserciones ni la cobertura visual de HTML o JavaScript.
 
-El historial conserva la importación del proyecto y de sus recursos, seguida de la actualización del POM a Java 21.
-
-## Plugins Maven de la práctica
-
-El POM declara Sonar Maven Plugin **5.5.0.6356**, JaCoCo **0.8.15** y Surefire **3.5.4**. `clean verify` ejecuta las pruebas y genera la cobertura HTML/XML en `target/site/jacoco/`. El Jenkinsfile publica el XML mediante Coverage.
-
-El análisis SonarQube requiere configurar el servidor y su token y ejecutar `mvn sonar:sonar`. Declarar el plugin en el POM no ejecuta ese análisis automáticamente. Consulta el [detalle de los cambios](docs/actualizacion-java21.md).
-
-## Cobertura actual: 100 % del codigo Java
-
-La suite actual tiene **34 pruebas aprobadas**, sin fallos, errores ni omisiones, verificadas con JDK 21 y Maven 3.9.11 dentro del contenedor Jenkins. JaCoCo reporta **97/97 metodos** y **259/259 lineas**, ambos al **100 %**, sin exclusiones de clases o metodos. Consulta las [pruebas, cambios y limites de la medicion](docs/cobertura-100.md).
-
-Para actualizar el resultado del trabajo **CompilarClienteJava21**, pulsa **Construir ahora**: el pipeline existente descarga `main` y ejecuta `clean verify`. El resultado anterior de una sola prueba se conserva abajo como evidencia historica.
+Consulta el [detalle de cobertura](docs/cobertura-100.md).
 
 ## Jenkins
 
-El repositorio incluye un [Jenkinsfile](Jenkinsfile) que descarga el proyecto, muestra las versiones de Java y Maven, ejecuta `mvn clean verify` y publica los resultados de las pruebas existentes.
+Configura las herramientas `JDK21` con ruta `/opt/java/openjdk` y `Maven3` con versión 3.9.11. Crea el trabajo **CompilarClienteJava21**, selecciona **Pipeline script** y pega el [Jenkinsfile](Jenkinsfile) completo. Activa **Use Groovy Sandbox**. El pipeline descarga `main`, muestra el POM y las versiones y ejecuta `clean verify` con `steps { dir('.') { sh ... } }`.
 
-Requiere estas herramientas en **Administrar Jenkins > Tools**:
+El trabajo publica JUnit y Coverage y ejecuta SonarQube con la clave `Ejercicio5Cliente`. Requiere JUnit, Coverage y SonarQube Scanner for Jenkins. Configura la instalación `SonarServer` y su token en Jenkins Credentials.
 
-- JDK con nombre `JDK21`, ruta `/opt/java/openjdk` en el contenedor Jenkins.
-- Maven con nombre `Maven3`, versión 3.9.11.
-- Complemento JUnit para publicar los resultados.
+Un cambio del Jenkinsfile en GitHub no reemplaza automáticamente el texto de un trabajo configurado con Pipeline script. Para incorporar cambios del script, cópialo de nuevo a Jenkins.
 
-Para utilizarlo como solicita la práctica, crea un trabajo de tipo **Pipeline** llamado `CompilarClienteJava21`, selecciona Definition **Pipeline script** y pega todo el contenido del [Jenkinsfile](Jenkinsfile) en el campo Script. Mantén activada la opción **Use Groovy Sandbox**. El código contiene la URL del repositorio público y la rama `main` para descargar el proyecto.
+## Herramientas Maven
 
-La etapa **Ver Directorio** ejecuta `pwd`, `ls -la` y `cat pom.xml`, para mostrar la ubicación, los archivos y el POM en la consola. **Build & Test** ejecuta `mvn --batch-mode --no-transfer-progress clean verify -Dsurefire.useFile=false`. La opción de Surefire muestra los resultados de pruebas en consola. Se conserva `verify` para generar también el reporte de JaCoCo.
+El POM utiliza Java 21 y declara explícitamente Sonar Maven Plugin **5.5.0.6356**, JaCoCo **0.8.15** y Maven Surefire **3.5.4**. El análisis Sonar se ejecuta en una etapa independiente después de generar cobertura; declarar el plugin no envía un análisis por sí solo.
 
-El POM está en la raíz del repositorio, por lo que estos comandos se ejecutan directamente en el directorio de trabajo.
+## Historial de la actualización
 
-El bloque **Build & Test** tiene la estructura `steps { dir('.') { sh ... } }`. El punto selecciona ese directorio de trabajo, donde se encuentra el POM.
-
-Guarda y selecciona **Construir ahora**. En la consola deben aparecer Java 21, Maven 3.9.11, `BUILD SUCCESS` y `Finished: SUCCESS`.
-
-Además de la verificación local, el trabajo `CompilarClienteJava21` terminó en `SUCCESS` con JDK 21.0.12.1 y Maven 3.9.11: compilación para Java 21, una prueba aprobada y JAR generado. JUnit publicó los resultados en Jenkins. Esa ejecución es anterior a la incorporación de los nuevos plugins Maven; vuelve a construir el trabajo para publicar la cobertura del cliente con el Jenkinsfile actualizado. La integración con el servidor SonarQube sigue pendiente.
+- [POM actual](pom.xml)
+- [POM original](docs/pom-original.xml)
+- [Cambios de Java 21 y plugins](docs/actualizacion-java21.md)
+- [Repositorio de la API](https://github.com/Marco33100/Ejercicio5MyAPIGestor)
