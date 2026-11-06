@@ -52,3 +52,39 @@ El POM utiliza Java 21 y declara explícitamente Sonar Maven Plugin **5.5.0.6356
 - [POM original](docs/pom-original.xml)
 - [Cambios de Java 21 y plugins](docs/actualizacion-java21.md)
 - [Repositorio de la API](https://github.com/Marco33100/Ejercicio5MyAPIGestor)
+
+
+## Evidencias de pruebas y análisis
+
+La captura compartida el **6 de noviembre de 2026** muestra el resultado conservado de **CompilarClienteJava21 #7**: **100 %**, con 97/97 métodos y 259/259 líneas. Los archivos adjuntos corresponden a la ejecución del **28 de octubre**, no a una compilación nueva.
+
+![Cobertura JaCoCo publicada en Jenkins para Ejercicio5Cliente](.github/assets/jenkins-coverage.png)
+
+### Reportes consultables desde GitHub
+
+| Evidencia | Archivo o enlace |
+| --- | --- |
+| JaCoCo completo HTML | [Índice](evidencias/2026-10-28/jacoco/index.html) |
+| JaCoCo XML | [Contadores y detalle](evidencias/2026-10-28/jacoco/jacoco.xml) |
+| Pruebas JUnit | [Resumen de suites](evidencias/2026-10-28/pruebas.json) |
+| Resultados Jenkins | [Resultado y extractos de consola](evidencias/2026-10-28/jenkins.json) |
+| Origen e integridad | [Procedencia](evidencias/2026-10-28/ORIGEN.txt) y [SHA256](evidencias/2026-10-28/SHA256SUMS.txt) |
+
+GitHub muestra el código de los archivos HTML. Para navegar el informe JaCoCo, descarga el repositorio completo y abre `evidencias/2026-10-28/jacoco/index.html`; conserva sus carpetas de estilos y páginas. El XML y los JSON se pueden consultar directamente en GitHub.
+
+### Servicios locales de la práctica
+
+- [Jenkins ejecución #7](http://127.0.0.1:8080/job/CompilarClienteJava21/7/).
+- [JaCoCo en Coverage](http://127.0.0.1:8080/job/CompilarClienteJava21/7/coverage/).
+- [Resultado de los tests](http://127.0.0.1:8080/job/CompilarClienteJava21/7/testReport/).
+- [SonarQube proyecto](http://127.0.0.1:9000/dashboard?id=Ejercicio5Cliente).
+- [SonarQube incidencias](http://127.0.0.1:9000/project/issues?id=Ejercicio5Cliente).
+
+Los enlaces `127.0.0.1` solo funcionan en el equipo con Jenkins y SonarQube. La captura y los archivos versionados permiten revisar cobertura y resultados desde otro equipo. El análisis final de SonarQube mostrado durante la práctica dejó **0 incidencias abiertas** en seguridad, fiabilidad y mantenibilidad, **Quality Gate aprobado**, **100 % de cobertura** y **0 % de duplicación**. Es un resultado del análisis configurado, no una garantía de ausencia de vulnerabilidades.
+
+### Código y commits
+
+- [Cobertura y pruebas del cliente](https://github.com/Marco33100/Ejercicio5Cliente/commit/54be752).
+- [Análisis SonarQube del cliente](https://github.com/Marco33100/Ejercicio5Cliente/commit/dec2ca6).
+- [Selección explícita del constructor](https://github.com/Marco33100/Ejercicio5Cliente/commit/829431f).
+- [Historial completo](https://github.com/Marco33100/Ejercicio5Cliente/commits/main/).
