@@ -1,6 +1,6 @@
 # Ejercicio5Cliente
 
-Cliente web del gestor de proyectos con Java 21, Spring Boot 3.2.5 y Thymeleaf. Consume la API en `http://localhost:8081`.
+Cliente web del gestor de proyectos con Java 21, Spring Boot 3.2.5 y Thymeleaf. Consume la API en `http://localhost:8081` por defecto; `GESTOR_API_URL` permite configurar la URL de la API en otros entornos.
 
 ## Requisitos
 
@@ -23,6 +23,17 @@ java -jar target/Ejercicio5Cliente-0.0.1-SNAPSHOT.jar --server.port=8082
 Abre [http://localhost:8082](http://localhost:8082). La API y MySQL deben estar iniciados para usar las operaciones del gestor. Se utiliza 8082 para dejar 8080 a Jenkins.
 
 En Linux o macOS utiliza `./mvnw` y configura las mismas variables de entorno si corresponde.
+
+## Desplegar en Render con Docker
+
+Este repositorio incluye un `Dockerfile` para publicar el cliente como **Web Service** (no como Static Site):
+
+1. Sube estos cambios a la rama del repositorio del cliente en GitHub.
+2. En Render, crea un **New > Web Service**, conecta el repositorio del cliente y selecciona **Docker** como runtime. Deja vacío **Root Directory** si el Dockerfile está en la raíz.
+3. En **Environment Variables**, agrega `GESTOR_API_URL` con la URL pública HTTPS del servicio API, sin una ruta adicional; por ejemplo `https://mi-api.onrender.com`.
+4. Crea el servicio. Render define `PORT` y el cliente lo usa automáticamente.
+
+La API debe estar desplegada y conectada a MySQL antes de probar las operaciones del cliente. El servicio gratuito de Render puede tardar en responder cuando vuelve a activarse después de estar inactivo.
 
 ## Pruebas y cobertura
 
