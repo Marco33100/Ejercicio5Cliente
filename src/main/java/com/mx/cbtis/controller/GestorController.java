@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +21,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import com.mx.cbtis.modelo.Comentarios;
 import com.mx.cbtis.modelo.Proyectos;
 import com.mx.cbtis.modelo.Tareas;
@@ -163,7 +159,11 @@ public class GestorController {
 		try {
 			ResponseEntity<Usuario> response = template.postForEntity(urlservicebd, paramUser, Usuario.class);
 			logger.info("Login API responded with status {}", response.getStatusCode());
-			return response;
+			// RestTemplate already decoded the upstream body. Its transport headers
+			// describe that upstream message, not the JSON we serialize here.
+			return ResponseEntity.status(response.getStatusCode())
+					.contentType(MediaType.APPLICATION_JSON)
+					.body(response.getBody());
 		} catch (RestClientException exception) {
 			logger.error("Login API call failed ({})", exception.getClass().getSimpleName());
 			throw exception;

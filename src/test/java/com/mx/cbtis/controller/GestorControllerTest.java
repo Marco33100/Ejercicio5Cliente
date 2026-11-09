@@ -11,6 +11,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -29,6 +30,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.servlet.MockMvc;
@@ -194,6 +196,22 @@ class GestorControllerTest {
         mvc.perform(post("/verificarLogin").contentType(MediaType.APPLICATION_JSON).content(USUARIO))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.id_usuario").value(45))
                 .andExpect(jsonPath("$.nombre").value("Usuario de prueba"));
+    }
+
+    @Test
+    void loginGeneraSuRespuestaSinReenviarCabecerasDeTransporteDeLaApi() throws Exception {
+        api.expect(requestTo(API + "/getUsuarioLogin"))
+                .andRespond(withSuccess(USUARIO, MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.TRANSFER_ENCODING, "chunked")
+                        .header(HttpHeaders.CONNECTION, "keep-alive")
+                        .header(HttpHeaders.CONTENT_LENGTH, Integer.toString(USUARIO.length())));
+
+        mvc.perform(post("/verificarLogin").contentType(MediaType.APPLICATION_JSON).content(USUARIO))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nombre").value("Usuario de prueba"))
+                .andExpect(header().doesNotExist(HttpHeaders.TRANSFER_ENCODING))
+                .andExpect(header().doesNotExist(HttpHeaders.CONNECTION))
+                .andExpect(header().doesNotExist(HttpHeaders.CONTENT_LENGTH));
     }
 
     @Test
