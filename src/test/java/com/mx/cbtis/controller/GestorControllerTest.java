@@ -226,10 +226,14 @@ class GestorControllerTest {
     @ValueSource(strings = {"/verificarTarea", "/cambiosTareas"})
     void accionesDeTareaDevuelvenLaConfirmacionDeLaApi(String ruta) throws Exception {
         api.expect(requestTo(API + "/addTareas")).andExpect(method(HttpMethod.POST))
-                .andExpect(content().json(TAREA, true)).andRespond(withSuccess("1", MediaType.APPLICATION_JSON));
+                .andExpect(content().json(TAREA, true)).andRespond(withSuccess("1", MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.TRANSFER_ENCODING, "chunked")
+                        .header(HttpHeaders.CONNECTION, "keep-alive"));
         mvc.perform(post(ruta).contentType(MediaType.APPLICATION_JSON).content(TAREA))
                 .andExpect(status().isOk())
-                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.content().string("1"));
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.content().string("1"))
+                .andExpect(header().doesNotExist(HttpHeaders.TRANSFER_ENCODING))
+                .andExpect(header().doesNotExist(HttpHeaders.CONNECTION));
     }
 
     @Test
