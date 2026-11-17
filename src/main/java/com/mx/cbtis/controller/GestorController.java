@@ -300,18 +300,11 @@ public class GestorController {
 		return new ModelAndView("redirect:/proyecto");
 	}
 	
-	@PostMapping("/verificarTarea")
+	@PostMapping({"/verificarTarea", "/cambiosTareas"})
 	public ResponseEntity<Integer> verificarTarea(@RequestBody Tareas paramName){
-		String urlservicebd = apiUrl("addTareas");
-		ResponseEntity<Integer> response = template.postForEntity(urlservicebd, paramName, Integer.class);
-		return response;
-	}
-	
-	@PostMapping("/cambiosTareas")
-	public ResponseEntity<Integer> cambiosTareas(@RequestBody Tareas paramDatos){
-		String urlservicebd = apiUrl("addTareas");
-		ResponseEntity<Integer> response = template.postForEntity(urlservicebd, paramDatos, Integer.class);
-		return response;
+		ResponseEntity<Integer> response = template.postForEntity(apiUrl("addTareas"), paramName, Integer.class);
+		// Same as login: don't forward the upstream transport headers.
+		return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
 	}
 	
 	@PostMapping("/consultarTareas")
