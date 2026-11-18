@@ -20,10 +20,12 @@ $(document).ready(function(){
 
           // Crear tarjetas para cada proyecto
           data.forEach(function(proyecto) {
+            // Older projects saved "/Images/animacionN.gif"; only the .webp version exists now.
+            var fondo = String(proyecto.fondo).replace(/(animacion\d+)\.gif$/, '$1.webp');
             var tarjeta = `
               <div class="col-md-4">
                 <div class="card mb-4">
-                  <img src="${proyecto.fondo}" alt="...">
+                  <img src="${fondo}" alt="...">
                   <div class="card-body">
                     <div class="dropdown">
                       <div class="d-flex justify-content-end">
