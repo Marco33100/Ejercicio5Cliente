@@ -243,4 +243,26 @@ class GestorControllerTest {
                 () -> mvc.perform(post("/consultarProyectos")));
         assertInstanceOf(HttpServerErrorException.class, error.getCause());
     }
+
+    @Test
+    void errorDeLaApiEnElLoginSePropagaSinFingirUnInicioDeSesion() {
+        api.expect(requestTo(API + "/getUsuarioLogin")).andRespond(withServerError());
+        ServletException error = assertThrows(ServletException.class,
+                () -> mvc.perform(post("/verificarLogin").contentType(MediaType.APPLICATION_JSON).content(USUARIO)));
+        assertInstanceOf(HttpServerErrorException.class, error.getCause());
+    }
+
+    @Test
+    void urlDeApiConBarraFinalNoDuplicaLaBarra() throws Exception {
+        RestTemplate template = new RestTemplate();
+        MockRestServiceServer apiConBarra = MockRestServiceServer.bindTo(template).build();
+        MockMvc mvcConBarra = MockMvcBuilders.standaloneSetup(new GestorController(template, "https://api.example.test/"))
+                .build();
+        apiConBarra.expect(requestTo("https://api.example.test/getUsuarioLogin"))
+                .andRespond(withSuccess(USUARIO, MediaType.APPLICATION_JSON));
+
+        mvcConBarra.perform(post("/verificarLogin").contentType(MediaType.APPLICATION_JSON).content(USUARIO))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.id_usuario").value(45));
+        apiConBarra.verify();
+    }
 }
