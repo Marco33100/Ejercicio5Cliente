@@ -96,6 +96,35 @@ pipeline {
                 }
             }
         }
+
+        stage('Security Scan (SAST) - Semgrep') {
+            steps {
+                dir('.') {
+                    // Se excluyen las librerias de terceros (Bootstrap) y los archivos generados.
+                    sh '''
+                        mkdir -p reportes
+                        rm -f reportes/semgrep.json
+                        "$JENKINS_HOME/tools/semgrep-1.181.0/bin/semgrep" scan \
+                            --config=auto \
+                            --json \
+                            --output=reportes/semgrep.json \
+                            --exclude='target' \
+                            --exclude='evidencias' \
+                            --exclude='*.min.js' \
+                            --exclude='*.min.css' \
+                            --exclude='bootstrap*' \
+                            .
+                    '''
+                }
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'reportes/semgrep.json',
+                        allowEmptyArchive: true,
+                        fingerprint: true
+                }
+            }
+        }
     }
 
     post {
