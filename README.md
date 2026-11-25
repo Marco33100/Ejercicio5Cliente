@@ -24,16 +24,16 @@ Abre [http://localhost:8082](http://localhost:8082). La API y MySQL deben estar 
 
 En Linux o macOS utiliza `./mvnw` y configura las mismas variables de entorno si corresponde.
 
-## Desplegar en Render con Docker
+## Desplegar en AWS EC2
 
-Este repositorio incluye un `Dockerfile` para publicar el cliente como **Web Service** (no como Static Site):
+El cliente corre en una VM EC2 (Ubuntu 24.04, `us-east-2`) junto con la API, MySQL y el monitoreo. El despliegue está automatizado en el repositorio [Ejercicio5Infra](https://github.com/Marco33100/Ejercicio5Infra): Terraform crea la VM y Ansible instala Docker y levanta todo con Docker Compose.
 
-1. Sube estos cambios a la rama del repositorio del cliente en GitHub.
-2. En Render, crea un **New > Web Service**, conecta el repositorio del cliente y selecciona **Docker** como runtime. Deja vacío **Root Directory** si el Dockerfile está en la raíz.
-3. En **Environment Variables**, agrega `GESTOR_API_URL` con la URL pública HTTPS del servicio API, sin una ruta adicional; por ejemplo `https://mi-api.onrender.com`.
-4. Crea el servicio. Render define `PORT` y el cliente lo usa automáticamente.
+- Docker Compose construye la imagen **en la VM, directamente desde la rama `main` de este repositorio**, con el [Dockerfile](Dockerfile) incluido (no hay registro de imágenes).
+- `GESTOR_API_URL` apunta a `http://api:8081`, la API dentro de la red interna de Compose.
+- El puerto 8080 del contenedor se publica como el **puerto 80** de la VM: es el único servicio de la aplicación expuesto a Internet.
+- `MANAGEMENT_SERVER_PORT=9091` publica las métricas de Actuator solo en la red interna, para Prometheus.
 
-La API debe estar desplegada y conectada a MySQL antes de probar las operaciones del cliente. El servicio gratuito de Render puede tardar en responder cuando vuelve a activarse después de estar inactivo.
+Para desplegar una nueva versión: haz merge a `main` y ejecuta `.\iac.ps1 deploy` en Ejercicio5Infra. Jenkins no despliega a AWS; solo hace la integración continua de este repositorio.
 
 ## Pruebas y cobertura
 
